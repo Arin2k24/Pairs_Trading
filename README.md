@@ -1,39 +1,69 @@
-# Pairs_Trading
+# Pairs Trading Strategy
 
-## Overview
+Pairs trading is a market-neutral trading strategy that aims to profit from the relative performance of two correlated assets. In this strategy, we identify pairs of stocks that exhibit high correlation and trade based on deviations from their historical relationship.
 
-This Python script implements a pairs trading strategy using MACD (Moving Average Convergence Divergence) signals applied to z-score spreads between highly correlated cryptocurrency pairs. The strategy aims to profit from the temporary price divergences between two assets within a pair while maintaining a market-neutral position.
+## Strategy Overview
 
-## Strategy
+### Objective
 
-Pairs trading involves identifying two assets with a high degree of correlation and trading them based on their relative prices. The basic steps of the strategy are as follows:
+The objective of this pairs trading strategy is to identify highly correlated pairs of stocks, calculate trading signals based on statistical indicators, manage positions, and implement risk control measures.
 
-1. **Data Collection**: Download historical price data for selected cryptocurrency pairs from Yahoo Finance or other sources.
+### Strategy Components
 
-2. **Correlation Analysis**: Calculate the correlation matrix between all pairs of cryptocurrencies. Identify highly correlated pairs with correlation coefficients above a specified threshold (e.g., 0.9).
+1. **Data Collection**: Historical stock price data for selected stocks is collected using the Yahoo Finance API.
 
-3. **Spread Calculation**: Calculate the spread between the prices of each pair's constituent assets. Compute the z-score of the spread to normalize it.
+2. **Pair Selection**: Pairs of stocks with high correlation coefficients are identified.
 
-4. **MACD Calculation**: Apply the MACD indicator to the z-score spread. Calculate the MACD line, signal line, and MACD histogram.
+3. **Spread Calculation**: The spread between the two stocks in each pair is calculated using a defined hedge ratio obtained from linear regression.
 
-5. **Signal Generation**: Generate trading signals based on MACD crossovers. A bullish crossover occurs when the MACD line crosses above the signal line, indicating a potential long (buy) signal. Conversely, a bearish crossover occurs when the MACD line crosses below the signal line, signaling a potential short (sell) signal.
+4. **Stationarity Test**: The Dickey-Fuller test is performed on the spread to determine stationarity, indicating a mean-reverting behavior suitable for pairs trading.
 
-6. **Trade Execution**: Open long (buy) positions when a bullish crossover signal is detected and short (sell) positions when a bearish crossover signal is detected. Close positions when the opposite crossover signal is generated or according to predefined exit criteria.
+5. **Z-Score Calculation**: The z-score of the spread is calculated using a rolling window for mean and standard deviation.
 
-## Example
+6. **Entry and Exit Signals**: Trading signals are generated based on z-score deviations from historical means. Long and short positions are initiated when the z-score crosses predefined thresholds.
 
-Suppose we have two highly correlated cryptocurrency pairs: BTC-USD and ETH-USD. We calculate the z-score spread between the prices of BTC-USD and ETH-USD and apply the MACD indicator to the spread. When a bullish MACD crossover occurs (MACD line crosses above the signal line), we enter a long position on BTC-USD and a short position on ETH-USD. We exit the position when a bearish MACD crossover or other exit criteria are met.
+7. **MACD Indicator**: An additional trading signal is generated using the MACD indicator applied to the z-score spread.
+
+8. **Position Management**: Positions are managed dynamically, and stop-loss measures are implemented to control risk.
+
+9. **Performance Monitoring**: Profit and loss (PnL) are monitored over time to evaluate the effectiveness of the strategy.
+
+## Pros and Cons
+
+### Pros
+
+- Market-Neutral: Pairs trading is designed to be market-neutral, meaning it can potentially generate profits regardless of market direction.
+- Statistical Edge: The strategy relies on statistical analysis to identify trading opportunities based on mean-reversion principles, offering a systematic approach to trading.
+- Risk Control: Stop-loss measures help control risk by limiting losses in case of adverse price movements.
+- Diversification: By trading multiple pairs of stocks, the strategy can provide diversification benefits and reduce idiosyncratic risk.
+
+### Cons
+
+- Correlation Breakdown: Pairs trading relies on the historical correlation between assets, which may break down during periods of market stress or fundamental changes in the underlying stocks.
+- Execution Challenges: Trading pairs requires simultaneous execution of buy and sell orders, which can be challenging, especially for illiquid stocks or during volatile market conditions.
+- Model Risk: The strategy's performance heavily depends on the accuracy of statistical models used for spread calculation and signal generation, introducing model risk.
+- Transaction Costs: Frequent trading in multiple stocks incurs transaction costs, which can erode profits, especially for smaller portfolios.
+
+## References
+
+- [Pairs Trading Basics](https://blog.quantinsti.com/pairs-trading-basics/)
+- [MACD Indicator](https://www.investopedia.com/terms/m/macd.asp)
+
+## Requirements
+
+- Python 3.x
+- Required libraries: `yfinance`, `pandas`, `numpy`, `seaborn`, `matplotlib`, `statsmodels`
+- Access to financial data via Yahoo Finance API
 
 ## Usage
 
-1. Clone this repository or download the Python script.
-2. Install the required dependencies (`pandas`, `numpy`, `seaborn`, `matplotlib`, `yfinance`) using pip.
-3. Run the Python script using a Python interpreter.
+1. Install the required Python libraries.
+2. Run the provided Python script to execute the pairs trading strategy.
+3. Adjust parameters such as window sizes, threshold values, and stop-loss levels as needed.
+4. Monitor the PnL and adjust the strategy accordingly.
 
 ## Disclaimer
 
-This trading strategy is for educational purposes only and should not be considered financial advice. Cryptocurrency trading involves risk, and past performance is not indicative of future results. Use this script at your own risk and discretion.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+- This pairs trading strategy is for educational purposes only and does not constitute financial advice.
+- Past performance is not indicative of future results. Trading involves risks, and losses may occur.
+- Use this strategy at your own risk, and consider consulting a financial advisor before making trading decisions.
